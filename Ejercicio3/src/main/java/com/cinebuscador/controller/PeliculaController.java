@@ -23,9 +23,12 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class PeliculaController {
+
+    private static final Set<String> EXTENSIONES_PERMITIDAS = Set.of(".jpg", ".jpeg", ".png", ".gif", ".webp");
 
     private final PeliculaRepository peliculaRepo;
 
@@ -85,7 +88,15 @@ public class PeliculaController {
         Pelicula pelicula = peliculaRepo.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Pelicula no encontrada"));
 
-        String filename = archivo.getOriginalFilename();
+        String originalFilename = archivo.getOriginalFilename();
+        String extension = (originalFilename != null && originalFilename.contains("."))
+            ? originalFilename.substring(originalFilename.lastIndexOf('.')).toLowerCase()
+            : "";
+        if (!EXTENSIONES_PERMITIDAS.contains(extension)) {
+            throw new IllegalArgumentException("Solo se permiten imagenes (jpg, jpeg, png, gif, webp)");
+        }
+
+        String filename = "afiche_" + id + "_" + System.currentTimeMillis() + extension;
         Path uploadPath = Paths.get(uploadDir);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
