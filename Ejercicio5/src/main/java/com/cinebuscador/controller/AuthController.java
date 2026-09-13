@@ -32,9 +32,7 @@ public class AuthController {
         User user = userRepository.findByUsername(username).orElse(null);
 
         if (user != null) {
-            // Descifrar la contraseña almacenada y comparar con la ingresada
-            String decryptedPassword = EncryptionService.decrypt(user.getPassword());
-            if (password.equals(decryptedPassword)) {
+            if (EncryptionService.matches(password, user.getPassword())) {
                 model.addAttribute("loginSuccess", true);
                 model.addAttribute("welcomeUser", username);
                 model.addAttribute("encryptedPassword", user.getPassword());
@@ -50,6 +48,12 @@ public class AuthController {
     @PostMapping("/register")
     public String register(@RequestParam String username, @RequestParam String password,
                            @RequestParam String confirmPwd, Model model) {
+        if (password == null || password.isBlank() || password.length() < 4) {
+            model.addAttribute("registerError", "La contraseña debe tener al menos 4 caracteres");
+            addForms(model);
+            return "index";
+        }
+
         if (!password.equals(confirmPwd)) {
             model.addAttribute("registerError", "Las contraseñas no coinciden");
             addForms(model);
@@ -62,15 +66,16 @@ public class AuthController {
             return "index";
         }
 
+        String hashedPassword = EncryptionService.hash(password);
 
         com.cinebuscador.model.User nuevoUsuario = new com.cinebuscador.model.User();
         nuevoUsuario.setUsername(username);
-        nuevoUsuario.setPassword(EncryptionService.encrypt(password));
+        nuevoUsuario.setPassword(hashedPassword);
         userRepository.save(nuevoUsuario);
 
         model.addAttribute("registerSuccess", true);
         model.addAttribute("registeredUsername", username);
-        model.addAttribute("encryptedPassword", EncryptionService.encrypt(password));
+        model.addAttribute("encryptedPassword", hashedPassword);
         addForms(model);
         return "index";
     }
