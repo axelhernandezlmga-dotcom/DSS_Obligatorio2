@@ -1,0 +1,55 @@
+# rama=main commit=37c0676 fecha=2026-10-24T23:24:51-03:00
+# comando: python -m pytest tests/practico4/test_e1_sqli_unit.py -v
+============================= test session starts ==============================
+platform linux -- Python 3.14.7, pytest-8.4.2, pluggy-1.7.0 -- /home/axelher/Materias/DSS_Obligatorio2-main/.venv/bin/python
+rootdir: /home/axelher/Materias/DSS_Obligatorio2-main
+configfile: pytest.ini
+collecting ... collected 3 items
+
+tests/practico4/test_e1_sqli_unit.py::test_busqueda_normal PASSED        [ 33%]
+tests/practico4/test_e1_sqli_unit.py::test_comilla_en_buscar_no_altera_la_consulta FAILED [ 66%]
+tests/practico4/test_e1_sqli_unit.py::test_sentido_de_orden_no_altera_la_consulta FAILED [100%]
+
+=================================== FAILURES ===================================
+_________________ test_comilla_en_buscar_no_altera_la_consulta _________________
+
+buscar = <function buscar_funciones at 0x7feab0fc8a90>
+
+    def test_comilla_en_buscar_no_altera_la_consulta(buscar):
+        # En la versión vulnerable, OR 1=1 hace que vuelvan todas las películas.
+>       assert nombres(buscar("%' OR 1=1 -- ")) == []
+E       AssertionError: assert ['Dune', 'Oppenheimer'] == []
+E         
+E         Left contains 2 more items, first extra item: 'Dune'
+E         
+E         Full diff:
+E         - []
+E         + [
+E         +     'Dune',
+E         +     'Oppenheimer',
+E         + ]
+
+tests/practico4/test_e1_sqli_unit.py:41: AssertionError
+_________________ test_sentido_de_orden_no_altera_la_consulta __________________
+
+buscar = <function buscar_funciones at 0x7feab0fc9a60>
+
+    def test_sentido_de_orden_no_altera_la_consulta(buscar):
+        # sort_dir va al ORDER BY; si se concatena, LIMIT 0 deja la búsqueda vacía.
+>       assert nombres(buscar("Dune", sort_dir="ASC LIMIT 0")) == ["Dune"]
+E       AssertionError: assert [] == ['Dune']
+E         
+E         Right contains one more item: 'Dune'
+E         
+E         Full diff:
+E         + []
+E         - [
+E         -     'Dune',
+E         - ]
+
+tests/practico4/test_e1_sqli_unit.py:46: AssertionError
+=========================== short test summary info ============================
+FAILED tests/practico4/test_e1_sqli_unit.py::test_comilla_en_buscar_no_altera_la_consulta
+FAILED tests/practico4/test_e1_sqli_unit.py::test_sentido_de_orden_no_altera_la_consulta
+========================= 2 failed, 1 passed in 0.16s ==========================
+# exit=1

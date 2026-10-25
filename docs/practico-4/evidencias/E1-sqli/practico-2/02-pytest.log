@@ -1,0 +1,14 @@
+# rama=practico-2 commit=ae3a7ee fecha=2026-10-24T23:23:43-03:00
+# comando: python -m pytest tests/practico4/test_e1_sqli_unit.py -v
+============================= test session starts ==============================
+platform linux -- Python 3.14.7, pytest-8.4.2, pluggy-1.7.0 -- /home/axelher/Materias/DSS_Obligatorio2/.venv/bin/python
+rootdir: /home/axelher/Materias/DSS_Obligatorio2
+configfile: pytest.ini
+collecting ... collected 3 items
+
+tests/practico4/test_e1_sqli_unit.py::test_busqueda_normal PASSED        [ 33%]
+tests/practico4/test_e1_sqli_unit.py::test_comilla_en_buscar_no_altera_la_consulta PASSED [ 66%]
+tests/practico4/test_e1_sqli_unit.py::test_sentido_de_orden_no_altera_la_consulta PASSED [100%]
+
+============================== 3 passed in 0.27s ===============================
+# exit=0

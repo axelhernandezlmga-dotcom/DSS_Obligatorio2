@@ -1,0 +1,59 @@
+# rama=main commit=37c0676 fecha=2026-10-24T23:25:14-03:00 contenedor=cinebuscador4 (StandardEvaluationContext vulnerable)
+# comando: PRACTICO4_URL=http://127.0.0.1:8080 python -m pytest tests/practico4/test_e3_ssti.py -v
+============================= test session starts ==============================
+platform linux -- Python 3.14.7, pytest-8.4.2, pluggy-1.7.0 -- /home/axelher/Materias/DSS_Obligatorio2-main/.venv/bin/python
+rootdir: /home/axelher/Materias/DSS_Obligatorio2-main
+configfile: pytest.ini
+collecting ... collected 3 items
+
+tests/practico4/test_e3_ssti.py::test_busqueda_normal_funciona PASSED    [ 33%]
+tests/practico4/test_e3_ssti.py::test_no_resuelve_tipos_java_del_sistema FAILED [ 66%]
+tests/practico4/test_e3_ssti.py::test_no_referencia_la_clase_runtime FAILED [100%]
+
+=================================== FAILURES ===================================
+___________________ test_no_resuelve_tipos_java_del_sistema ____________________
+
+    def test_no_resuelve_tipos_java_del_sistema():
+        # T(...) referencia clases Java: es el vector de SSTI/SpEL que la
+        # mitigación del P2 (SimpleEvaluationContext) bloquea. En main se evalúa
+        # y filtra el nombre del sistema operativo; en practico-2 se rechaza.
+        _, pagina = buscar("T(java.lang.System).getProperty('os.name')")
+    
+>       assert "Resultados buscando por: Linux" not in pagina
+E       assert 'Resultados ...o por: Linux' not in '<!DOCTYPE h...>\n</html>\n'
+E         
+E         'Resultados buscando por: Linux' is contained here:
+E           <!DOCTYPE html>
+E           <html>
+E           <head>
+E               <meta charset="UTF-8">
+E               <title>Cine Buscador - Busqueda de Funciones</title>...
+E         
+E         ...Full output truncated (40 lines hidden), use '-vv' to show
+
+tests/practico4/test_e3_ssti.py:37: AssertionError
+_____________________ test_no_referencia_la_clase_runtime ______________________
+
+    def test_no_referencia_la_clase_runtime():
+        # Runtime es la puerta a la ejecución de comandos; tampoco debe resolverse.
+        # En main, T(java.lang.Runtime) se evalúa y muestra "class java.lang.Runtime".
+        _, pagina = buscar("T(java.lang.Runtime)")
+    
+>       assert "class java.lang.Runtime" not in pagina
+E       assert 'class java.lang.Runtime' not in '<!DOCTYPE h...>\n</html>\n'
+E         
+E         'class java.lang.Runtime' is contained here:
+E           <!DOCTYPE html>
+E           <html>
+E           <head>
+E               <meta charset="UTF-8">
+E               <title>Cine Buscador - Busqueda de Funciones</title>...
+E         
+E         ...Full output truncated (41 lines hidden), use '-vv' to show
+
+tests/practico4/test_e3_ssti.py:45: AssertionError
+=========================== short test summary info ============================
+FAILED tests/practico4/test_e3_ssti.py::test_no_resuelve_tipos_java_del_sistema
+FAILED tests/practico4/test_e3_ssti.py::test_no_referencia_la_clase_runtime
+========================= 2 failed, 1 passed in 0.15s ==========================
+# exit=1

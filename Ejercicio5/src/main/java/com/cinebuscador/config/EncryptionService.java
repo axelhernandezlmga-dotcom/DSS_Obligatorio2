@@ -56,6 +56,16 @@ public class EncryptionService {
         }
     }
 
+    // Nombres compartidos con la corrección para poder ejecutar la misma prueba en ambas ramas.
+    // En esta rama siguen usando AES/ECB reversible, por lo que no agregan una mitigación.
+    public static String hash(String plaintext) {
+        return encrypt(plaintext);
+    }
+
+    public static boolean matches(String plaintext, String encrypted) {
+        return plaintext.equals(decrypt(encrypted));
+    }
+
     /**
      * Descifra una contraseña cifrada con AES-256/ECB.
      */
