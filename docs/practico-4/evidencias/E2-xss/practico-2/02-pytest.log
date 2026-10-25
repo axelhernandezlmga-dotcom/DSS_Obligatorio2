@@ -1,0 +1,13 @@
+# rama=practico-2 commit=ae3a7ee fecha=2026-10-24T23:23:44-03:00
+# comando: python -m pytest tests/practico4/test_e2_xss_unit.py -v
+============================= test session starts ==============================
+platform linux -- Python 3.14.7, pytest-8.4.2, pluggy-1.7.0 -- /home/axelher/Materias/DSS_Obligatorio2/.venv/bin/python
+rootdir: /home/axelher/Materias/DSS_Obligatorio2
+configfile: pytest.ini
+collecting ... collected 2 items
+
+tests/practico4/test_e2_xss_unit.py::test_descripcion_con_script_se_escapa PASSED [ 50%]
+tests/practico4/test_e2_xss_unit.py::test_descripcion_normal_se_muestra PASSED [100%]
+
+============================== 2 passed in 0.16s ===============================
+# exit=0

@@ -1,0 +1,35 @@
+# rama=main commit=37c0676 fecha=2026-10-24T23:24:51-03:00
+# comando: python -m pytest tests/practico4/test_e2_xss_unit.py -v
+============================= test session starts ==============================
+platform linux -- Python 3.14.7, pytest-8.4.2, pluggy-1.7.0 -- /home/axelher/Materias/DSS_Obligatorio2-main/.venv/bin/python
+rootdir: /home/axelher/Materias/DSS_Obligatorio2-main
+configfile: pytest.ini
+collecting ... collected 2 items
+
+tests/practico4/test_e2_xss_unit.py::test_descripcion_con_script_se_escapa FAILED [ 50%]
+tests/practico4/test_e2_xss_unit.py::test_descripcion_normal_se_muestra PASSED [100%]
+
+=================================== FAILURES ===================================
+____________________ test_descripcion_con_script_se_escapa _____________________
+
+modulo_ejercicio2 = <module 'app_ejercicio_2' from '/home/axelher/Materias/DSS_Obligatorio2-main/Ejercicio2/app.py'>
+
+    def test_descripcion_con_script_se_escapa(modulo_ejercicio2):
+        bloque = vista_previa(modulo_ejercicio2, "<script>alert('xss')</script>")
+    
+        # La versión vulnerable deja el <script> tal cual (filtro | safe); la
+        # mitigada lo escapa, así que el navegador no lo ejecuta.
+>       assert "<script>" not in bloque
+E       AssertionError: assert '<script>' not in '\n         ...            '
+E         
+E         '<script>' is contained here:
+E           
+E                                   <strong>Descripción actual:</strong><br>
+E                                   <script>alert('xss')</script>
+E         ?                         ++++++++
+
+tests/practico4/test_e2_xss_unit.py:29: AssertionError
+=========================== short test summary info ============================
+FAILED tests/practico4/test_e2_xss_unit.py::test_descripcion_con_script_se_escapa
+========================= 1 failed, 1 passed in 0.17s ==========================
+# exit=1
